@@ -50,7 +50,7 @@ register_attribute('select_option', 'Select option', 'enum', 'option-2', [
 </section>
 ```
 
-To build the blocks, run `bunx airblocks build` in the theme directory.
+To build the blocks, run `bun /path/to/repository build` in the theme directory.
 
 ## .blocktoolrc.json configuration file
 
@@ -71,3 +71,4 @@ You can override any value specified in src/config.js
 - Add support for inputDir/block-name.block.json configuration instead of comments
 - InnerBlocks replace
 - Remove wp-rich etc from rendered output
+- Create block command
