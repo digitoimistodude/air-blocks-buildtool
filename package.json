@@ -1,0 +1,40 @@
+{
+  "name": "air-blocks-build-tool",
+  "description": "Air Blocks Build Tool is a modern Gutenberg block build tool (prototype)",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node ."
+  },
+  "bin": {
+    "airblocks": "./bin/airblocks.mjs"
+  },
+  "dependencies": {
+    "@wordpress/block-editor": "^12.15.0",
+    "@wordpress/i18n": "^4.47.0",
+    "bun-types": "^1.0.15",
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "comment-parser": "^1.4.1",
+    "global": "^4.4.0",
+    "html-to-react": "^1.7.0",
+    "node-html-parser": "^6.1.11",
+    "php-parser": "^3.1.5",
+    "react": "^18.2.0"
+  },
+  "keywords": [
+    "wordpress",
+    "gutenberg",
+    "wp-block"
+  ],
+  "license": "GPL-2.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digitoimistodude/air-blocks-buildtool.git"
+  },
+  "bugs": {
+    "url": "https://github.com/digitoimistodude/air-blocks-buildtool/issues"
+  },
+  "homepage": "https://github.com/digitoimistodude/air-blocks-buildtool#readme"
+}

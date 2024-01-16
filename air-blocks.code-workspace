@@ -1,0 +1,12 @@
+{
+  "folders": [
+    {
+      "name": "Tool",
+      "path": "."
+    },
+    {
+      "name": "WP",
+      "path": "/var/www/airdev/content/themes/airdev"
+    }
+  ]
+}
