@@ -49,13 +49,11 @@ export default async function () {
       )}' );`
     );
     await Bun.write(
-      path.join(outputDir, "render.php"),
-      `<?php include_once('framework.php'); ?>\n${await Bun.file(
-        inputFile
-      ).text()}`
+      path.join(outputDir, "block.php"),
+      await Bun.file(inputFile).text()
     );
     await Bun.write(
-      path.join(outputDir, "framework.php"),
+      path.join(outputDir, "render.php"),
       await Bun.file(path.resolve(toolRoot, "./php/framework.php")).text()
     );
 

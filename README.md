@@ -33,7 +33,7 @@ register_attribute('select_option', 'Select option', 'enum', 'option-2', [
 ]);
 ?>
 <section class="block block-testi">
-  <h1 wp-rich="title" wp-placeholder="Rich text title placeholder"><?php echo attr('test'); ?></h1>
+  <h1 wp-rich="title" wp-placeholder="Rich text title placeholder"><?php echo attr('title'); ?></h1>
   <h2><?php echo attr('test'); ?></h2>
 
   <!-- Use wp-rich-formats to specify allowed formats, default none. -->
