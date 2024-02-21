@@ -1,5 +1,6 @@
 import { program } from "commander";
 import build from "./commands/build.js";
+import dev from "./commands/dev.js";
 import { loadConfig } from "./config.js";
 
 if (!global.Bun) {
@@ -31,7 +32,7 @@ program
   .description(
     "Builds the available blocks to block.json format in watch mode (not implemented)"
   )
-  .action(() => console.log("This command has not been implemented yet"));
+  .action(dev);
 
 // Runs the program
 program.parse();

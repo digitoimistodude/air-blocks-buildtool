@@ -10,6 +10,10 @@ export default async function () {
   const inputDir = path.resolve(process.cwd(), config.inputDir);
   const outputDirRoot = path.resolve(process.cwd(), config.outputDir);
 
+  build(inputDir, outputDirRoot);
+}
+
+async function build(inputDir, outputDirRoot) {
   const files = await readdir(inputDir);
 
   // For now only care for php files
@@ -59,6 +63,6 @@ export default async function () {
 
     clearRunning();
 
-    console.log("Built succesfully");
+    console.log(`[Air Blocks] Block built: ${file}`);
   }
 }

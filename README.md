@@ -61,11 +61,12 @@ You can override any value specified in src/config.js
 
 ## TODO
 
-- [ ] Remove wp-rich etc from rendered output
-- [ ] InnerBlocks replace
+- [x] Remove wp-rich etc from rendered output
+- [x] InnerBlocks replace
 - [ ] Maybe add support for ACF fields
 - [ ] Add more input types
-- [ ] Dev mode (watch), gulp?
+- [x] Dev mode (watch)
+- [ ] air-light gulp plugin? rolle?
 
 - [ ] Add dynamic "dependencies" support
 - [ ] Add support for static blocks (.html)
