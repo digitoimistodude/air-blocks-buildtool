@@ -6,6 +6,10 @@
     },
     {
       "name": "WP",
+      "path": "/var/www/air-blocks/content/themes/air-blocks"
+    },
+    {
+      "name": "WP 2",
       "path": "/var/www/airdev/content/themes/airdev"
     }
   ]

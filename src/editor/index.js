@@ -41,7 +41,7 @@ const name = getBlock();
 registerBlockType(name, {
   edit: (props) => {
     const blockProps = useBlockProps({
-      className: "air-block",
+      className: `air-block block-${name.split("/")[1]}`,
     });
     const fetchRequestRef = useRef();
     const isMountedRef = useRef(true);

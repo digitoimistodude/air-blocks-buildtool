@@ -44,7 +44,7 @@ export default async function () {
     );
     await Bun.write(
       path.join(outputDir, "editor.asset.php"),
-      `<?php return array( 'dependencies' => array( 'react', 'wp-blocks', 'wp-i18n' ), 'version' => '${Bun.hash(
+      `<?php return array( 'dependencies' => array( 'react', 'wp-blocks', 'wp-i18n', 'wp-block-editor' ), 'version' => '${Bun.hash(
         Date.now()
       )}' );`
     );
