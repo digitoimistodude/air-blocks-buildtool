@@ -61,14 +61,17 @@ You can override any value specified in src/config.js
 
 ## TODO
 
-- Add support for Node.js
-- Add dynamic "dependencies" support
-- Add support for "folder" structure
-- Add support for static blocks (.html)
-- Improve bundle size (react seems to be separately bundled :/, use wp.React etc.)
-- Add more input types
-- Maybe add support for ACF fields
-- Add support for inputDir/block-name.block.json configuration instead of comments
-- InnerBlocks replace
-- Remove wp-rich etc from rendered output
-- Create block command
+- [ ] Remove wp-rich etc from rendered output
+- [ ] InnerBlocks replace
+- [ ] Maybe add support for ACF fields
+- [ ] Add more input types
+- [ ] Dev mode (watch), gulp?
+
+- [ ] Add dynamic "dependencies" support
+- [ ] Add support for static blocks (.html)
+- [ ] Add support for "folder" structure
+- [ ] Add support for inputDir/block-name.block.json configuration instead of comments
+- [ ] Create block command (migrate air-blocks newblock, use bun $\`\`?)
+- [ ] Improve bundle size (react seems to be separately bundled :/, use wp.React etc., only affects admin)
+
+- [ ] Add support for Node.js (low priority)

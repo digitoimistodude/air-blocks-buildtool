@@ -11,6 +11,7 @@
     "airblocks": "./bin/airblocks.mjs"
   },
   "dependencies": {
+    "@raikasta/html-to-react": "^1.7.0",
     "@wordpress/block-editor": "^12.15.0",
     "@wordpress/i18n": "^4.47.0",
     "bun-types": "^1.0.15",
@@ -18,7 +19,6 @@
     "commander": "^11.1.0",
     "comment-parser": "^1.4.1",
     "global": "^4.4.0",
-    "html-to-react": "^1.7.0",
     "node-html-parser": "^6.1.11",
     "php-parser": "^3.1.5",
     "react": "^18.2.0"

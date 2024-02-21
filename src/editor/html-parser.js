@@ -1,4 +1,4 @@
-import { ProcessNodeDefinitions, Parser } from "html-to-react";
+import { ProcessNodeDefinitions, Parser } from "@raikasta/html-to-react";
 const { InnerBlocks, RichText } = window.wp.blockEditor;
 const { __ } = window.wp.i18n;
 
@@ -57,7 +57,7 @@ export default function bringHtmlToLife(
             ?.split(",")
             .map((format) =>
               format.includes("/") ? format : `core/${format}`
-            ) ?? [];
+            ) ?? undefined;
         return <InnerBlocks allowedBlocks={allowedBlocks} />;
       },
     },
