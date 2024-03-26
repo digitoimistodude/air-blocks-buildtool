@@ -2,6 +2,9 @@ import { ProcessNodeDefinitions, Parser } from "@raikasta/html-to-react";
 const { InnerBlocks, RichText } = window.wp.blockEditor;
 const { __ } = window.wp.i18n;
 
+const { InspectorControls } = window.wp.blockEditor;
+const { PanelBody } = window.wp.components;
+
 const htmlToReactParser = new Parser();
 const richTextTags = ["p", "h1", "h2", "h3", "h4", "h5", "h6"];
 
@@ -67,6 +70,51 @@ export default function bringHtmlToLife(
         return true;
       },
       processNode: processNodeDefinitions.processDefaultNode,
+    },
+  ];
+
+  return htmlToReactParser.parseWithInstructions(
+    htmlInput,
+    () => true,
+    processingInstructions
+  );
+}
+
+function findAcfParent(node, index = 0) {
+  if (node?.name === "acf-fields") return true;
+  if (index >= 5) return false;
+  console.log(index);
+  return findAcfParent(node?.parent, index + 1);
+}
+
+export function acffields(htmlInput) {
+  const processNodeDefinitions = new ProcessNodeDefinitions();
+  const processingInstructions = [
+    {
+      // ACF fields
+      shouldProcessNode: (node) => node.name?.toLowerCase() === "acf-fields",
+      processNode: (node, children) => {
+        console.log("CHILDREN", children);
+        return (
+          <PanelBody
+            title={__("ACF Fields Settings", "air-blocks")}
+            initialOpen={true}
+          >
+            {...children}
+          </PanelBody>
+        );
+      },
+    },
+    {
+      shouldProcessNode: (node) => findAcfParent(node.parent),
+      processNode: (node, children, param2) => {
+        console.log("process", node);
+        return processNodeDefinitions.processDefaultNode(
+          node,
+          children,
+          param2
+        );
+      },
     },
   ];
 

@@ -27,7 +27,7 @@ const {
 } = window.wp.components;
 const { __ } = window.wp.i18n;
 
-import bringHtmlToLife from "./html-parser";
+import bringHtmlToLife, { acffields } from "./html-parser";
 import { getBlock } from './macro.js' with { type: 'macro' };
 
 function rendererPath(block, attributes = null, urlQueryArgs = {}) {
@@ -141,7 +141,7 @@ registerBlockType(name, {
         sidebarAttributes.length > 0 ? (
           <InspectorControls key={name}>
             <PanelBody
-              title={__("Block Settings", "bodybuilder")}
+              title={__("Air Block Settings", "air-blocks")}
               initialOpen={true}
             >
               {sidebarAttributes.map((attribute) => (
@@ -151,7 +151,7 @@ registerBlockType(name, {
                       <TextControl
                         label={__(
                           attribute["air-label"] || attribute.name,
-                          "bodybuilder"
+                          "air-blocks"
                         )}
                         value={props.attributes[attribute.name]}
                         onChange={(val) =>
@@ -163,7 +163,7 @@ registerBlockType(name, {
                       <ToggleControl
                         label={__(
                           attribute["air-label"] || attribute.name,
-                          "bodybuilder"
+                          "air-blocks"
                         )}
                         checked={props.attributes[attribute.name]}
                         onChange={(val) =>
@@ -175,7 +175,7 @@ registerBlockType(name, {
                       <SelectControl
                         label={__(
                           attribute["air-label"] || attribute.name,
-                          "bodybuilder"
+                          "air-blocks"
                         )}
                         value={props.attributes[attribute.name]}
                         options={Object.keys(attribute["air-options"]).map(
@@ -193,6 +193,7 @@ registerBlockType(name, {
                 </PanelRow>
               ))}
             </PanelBody>
+            {...acffields(response.trim()).filter((i) => i != !!i)}
           </InspectorControls>
         ) : (
           <></>

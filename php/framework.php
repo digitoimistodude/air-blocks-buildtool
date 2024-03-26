@@ -41,3 +41,24 @@ if ( ! $is_editor ) {
 
 // We're just parsing content coming from blocks, so no escaping is necessary.
 echo $html; // phpcs:ignore
+
+if ( $is_editor && function_exists( 'acf_get_field_groups' ) ) {
+  $acf_fields = [];
+  $groups = acf_get_field_groups(
+		[
+			'air_block' => 'test',
+    ]
+	);
+
+	// Loop over results and append fields.
+	if ( $groups ) {
+		foreach ( $groups as $field_group ) {
+			$acf_fields = array_merge( $acf_fields, acf_get_fields( $field_group ) );
+		}
+	}
+
+
+  echo '<acf-fields>';
+    acf_render_fields( $acf_fields, 'air_block_test', 'div', 'field' );
+  echo '</acf-fields>';
+}
