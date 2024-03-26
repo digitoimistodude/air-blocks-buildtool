@@ -1,6 +1,8 @@
 import PHPParser from "php-parser";
 import { parse as parseComments } from "comment-parser";
 import { executePHPFile } from "../utils/phpRunner.js";
+import path from "node:path";
+import merge from "deepmerge";
 
 const parser = new PHPParser({
   parser: {
@@ -63,24 +65,49 @@ export async function generateBlockJson(input) {
     return Object.assign(obj, { [name]: data });
   }, {});
 
-  if (!headerData.title)
+  let blockJson = {
+    apiVersion: 3,
+    ...headerData,
+    editorScript: "file:./editor.js",
+    render: "file:./render.php",
+    attributes,
+  };
+
+  // Allow overriding block.json using <blockname>.block.json
+  // BJOF = Block.Json Override File
+  const bjofPath = path.format({
+    ...path.parse(input),
+    base: "",
+    ext: "json",
+  });
+  const bjofFile = Bun.file(bjofPath);
+
+  if (await bjofFile.exists()) {
+    const blockJsonOverride = await bjofFile.json();
+
+    if (blockJsonOverride.air_override_attributes) {
+      attributes = blockJsonOverride.attributes;
+      delete blockJsonOverride.air_override_attributes;
+      delete blockJsonOverride.attributes;
+    }
+
+    blockJson = merge(blockJson, blockJsonOverride);
+  }
+
+  // Quickly make sure title is set
+  if (!blockJson.title)
     throw new Error(`Couldn't register block due to title missing.`);
 
-  if (!headerData.name) {
-    const id = headerData.title
+  // Use airblocks namespace if namespace isn't set
+  if (!blockJson.name) {
+    const id = blockJson.title
       .toLowerCase()
       .replace(" ", "-")
       .replace(/\W/g, "");
-    headerData.name = `airblocks/${id}`;
+    blockJson.name = `airblocks/${id}`;
   }
 
-  return {
-    apiVersion: 3,
-    ...headerData,
-    attributes,
-    editorScript: "file:./editor.js",
-    render: "file:./render.php",
-  };
+  return blockJson;
 }
 
 async function getRichTextAttributes(blockPath) {
@@ -92,7 +119,7 @@ async function getRichTextAttributes(blockPath) {
       blockJsonAttributes.push({
         name: attributes["wp-rich"],
         type: "string",
-        default: "", // TODO: Default? Maybe the default content
+        default: attributes["wp-default"] ?? "",
         "air-label": attributes["wp-rich"],
         "air-type": "rich-text",
       });

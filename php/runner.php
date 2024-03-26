@@ -1,20 +1,24 @@
 <?php
-// This runner is used to generate PHP for HTML attribute scanning
-error_reporting(0);  
+/**
+ * This runner is used to generate PHP for HTML attribute scanning
+ * @package air-blocks-buildtool
+ */
+
+error_reporting( 0 ); // phpcs:ignore
 
 $attributes = [];
 
-function register_attribute( $key, $name, $type, $defaultValue ) {
+function register_attribute( $key, $name, $type, $default_value ) {
   global $attributes;
-  $attributes[$key] = $defaultValue;
+  $attributes[ $key ] = $default_value;
 }
 
 function attr( $key ) {
   global $attributes;
-  if ( ! isset( $attributes[$key] ) ) {
-    return "";
+  if ( ! isset( $attributes[ $key ] ) ) {
+    return '';
   }
-  return $attributes[$key];
+  return $attributes[ $key ];
 }
 
-include_once $argv[1];
+require_once $argv[1];

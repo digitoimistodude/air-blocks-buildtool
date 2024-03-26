@@ -38,7 +38,7 @@ register_attribute('select_option', 'Select option', 'enum', 'option-2', [
 
   <!-- Use wp-rich-formats to specify allowed formats, default none. -->
   <!-- Separated by a comma, no spaces. If a namespace (namespace/format) is not specified, by default using core -->
-  <p wp-rich="description" wp-rich-formats="bold,italic,code,image,text-color,link,keyboard"><?php echo attr('description'); ?></p>
+  <p wp-rich="description" wp-default="Air Blocks Buildtool rocks!" wp-rich-formats="bold,italic,code,image,text-color,link,keyboard"><?php echo attr('description'); ?></p>
 
   <?php if (attr('show_test')) : ?>
     <p>Test showing</p>
@@ -52,27 +52,24 @@ register_attribute('select_option', 'Select option', 'enum', 'option-2', [
 
 To build the blocks, run `bun /path/to/repository build` in the theme directory.
 
+## Overriding generated block.json values
+
+You can override block.json values by creating a `template-parts/blocks/<block>.block.json` file. You can just use the values you want to override:
+
+```json
+{
+  "title": "Hello world!",
+  "attributes": {
+    "test": {
+      "default": "Overridden default value"
+    }
+  }
+}
+```
+
 ## .blocktoolrc.json configuration file
 
 You can override any value specified in src/config.js
 
 - inputDir: The directory where the tool searches for .php files
 - outputDir: The directory where blocks are generated to into subdirectories (inputDir/test.php -> outputDir/test/block.json)
-
-## TODO
-
-- [x] Remove wp-rich etc from rendered output
-- [x] InnerBlocks replace
-- [ ] Maybe add support for ACF fields
-- [ ] Add more input types
-- [x] Dev mode (watch)
-- [ ] air-light gulp plugin? rolle?
-
-- [ ] Add dynamic "dependencies" support
-- [ ] Add support for static blocks (.html)
-- [ ] Add support for "folder" structure
-- [ ] Add support for inputDir/block-name.block.json configuration instead of comments
-- [ ] Create block command (migrate air-blocks newblock, use bun $\`\`?)
-- [ ] Improve bundle size (react seems to be separately bundled :/, use wp.React etc., only affects admin)
-
-- [ ] Add support for Node.js (low priority)

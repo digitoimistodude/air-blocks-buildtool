@@ -4,6 +4,7 @@
  * @package air-blocks
  */
 
+// Workaround to access local variables inside functions
 global $get_attribute_local_scope;
 $get_attribute_local_scope = function ( $key ) use ( $attributes ) {
   if ( ! isset( $attributes[ $key ] ) ) {
