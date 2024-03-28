@@ -14,7 +14,11 @@ $get_attribute_local_scope = function ( $key ) use ( $attributes ) {
 };
 
 if ( ! function_exists( 'register_attribute' ) ) {
-  function register_attribute( $key, $name, $type, $default_value ) {}
+  function register_attribute( $key, $name, $type = "string", $default_value = "" ) {}
+}
+
+if ( ! function_exists( 'register_rich_text' ) ) {
+  function register_rich_text( $key, $default_value = "" ) {}
 }
 
 if ( ! function_exists( 'attr' ) ) {

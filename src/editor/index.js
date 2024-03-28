@@ -40,9 +40,6 @@ function rendererPath(block, attributes = null, urlQueryArgs = {}) {
 const name = getBlock();
 registerBlockType(name, {
   edit: (props) => {
-    const blockProps = useBlockProps({
-      className: `air-block block-${name.split("/")[1]}`,
-    });
     const fetchRequestRef = useRef();
     const isMountedRef = useRef(true);
     const [response, setResponse] = useState(null);
@@ -93,7 +90,6 @@ registerBlockType(name, {
     const sidebarAttributes = useMemo(() => {
       const block = wp.blocks.getBlockType(name);
       if (!block) return;
-      console.log(props);
       return Object.keys(block.attributes)
         .map((i) => ({ name: i, ...(block.attributes[i]) }))
         .map((i) => ({
@@ -112,6 +108,10 @@ registerBlockType(name, {
         fetchData();
       }
     }, [sidebarAttributes]); // Only on non-rich-text attributes
+
+    const blockProps = useBlockProps({
+      className: `air-block block-${name.split("/")[1]}`,
+    });
 
     if (!hasResponse) {
       return (
@@ -136,6 +136,7 @@ registerBlockType(name, {
 
     const element = window.React.cloneElement(serialized, {
       ...blockProps,
+      className: `${blockProps.className} ${serialized?.props?.className ?? ''}`,
       children: [
         ...serialized.props.children,
         sidebarAttributes.length > 0 ? (

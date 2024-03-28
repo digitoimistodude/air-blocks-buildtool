@@ -3,7 +3,7 @@ const { InnerBlocks, RichText } = window.wp.blockEditor;
 const { __ } = window.wp.i18n;
 
 const htmlToReactParser = new Parser();
-const richTextTags = ["p", "h1", "h2", "h3", "h4", "h5", "h6"];
+const richTextTags = ["p", "a", "h1", "h2", "h3", "h4", "h5", "h6"];
 
 /**
  * Turns HTML into React element, with all necessary rich stuff

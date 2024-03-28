@@ -1,6 +1,5 @@
 import PHPParser from "php-parser";
 import { parse as parseComments } from "comment-parser";
-import { executePHPFile } from "../utils/phpRunner.js";
 import path from "node:path";
 import merge from "deepmerge";
 
@@ -57,7 +56,7 @@ export async function generateBlockJson(input) {
     };
   });
 
-  const richTextAttributes = await getRichTextAttributes(input);
+  const richTextAttributes = await getRichTextAttributes(program);
   attributes = [...attributes, ...richTextAttributes];
   // TODO: temp fix, rewrite this later to the correct format (not array, key => obj)
   attributes = attributes.reduce((obj, item) => {
@@ -107,26 +106,31 @@ export async function generateBlockJson(input) {
     blockJson.name = `airblocks/${id}`;
   }
 
+  if (blockJson.name.split("/").length < 2) {
+    blockJson.name = `airblocks/${blockJson.name}`;
+  }
+
   return blockJson;
 }
 
-async function getRichTextAttributes(blockPath) {
-  const html = (await executePHPFile(blockPath)).trim();
-  let blockJsonAttributes = [];
-  const transformer = new HTMLRewriter().on("*[wp-rich]", {
-    element(el) {
-      const attributes = Object.fromEntries(Array.from(el.attributes));
-      blockJsonAttributes.push({
-        name: attributes["wp-rich"],
-        type: "string",
-        default: attributes["wp-default"] ?? "",
-        "air-label": attributes["wp-rich"],
-        "air-type": "rich-text",
-      });
-    },
+async function getRichTextAttributes(program) {
+  // Get rich text (wp-rich) attributes that need to be registered
+  const attributeExpressions = program.children
+    .map((i) => i.expression)
+    .filter((i) => i?.kind === "call") // Check that it's a function call. Also filters undefineds
+    .filter(
+      (i) => i.what?.kind === "name" && i.what.name === "register_rich_text"
+    ); // Check that it's a rich text attribute registration
+
+  // TODO: process these attributes to proper block json format :)
+  return attributeExpressions.map((expression) => {
+    const [name, defaultValue] = expression.arguments.map((i) => i.value);
+    return {
+      name,
+      type: "string",
+      default: defaultValue ?? "",
+      "air-label": name,
+      "air-type": "rich-text",
+    };
   });
-
-  await transformer.transform(html);
-
-  return blockJsonAttributes;
 }

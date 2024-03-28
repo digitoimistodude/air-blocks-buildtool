@@ -31,6 +31,8 @@ register_attribute('select_option', 'Select option', 'enum', 'option-2', [
   'option-2' => 'Option 2',
   'option-3' => 'Option 3',
 ]);
+register_rich_text( 'title' );
+register_rich_text( 'description', 'Default description' );
 ?>
 <section class="block block-testi">
   <h1 wp-rich="title" wp-placeholder="Rich text title placeholder"><?php echo attr('title'); ?></h1>
@@ -38,7 +40,7 @@ register_attribute('select_option', 'Select option', 'enum', 'option-2', [
 
   <!-- Use wp-rich-formats to specify allowed formats, default none. -->
   <!-- Separated by a comma, no spaces. If a namespace (namespace/format) is not specified, by default using core -->
-  <p wp-rich="description" wp-default="Air Blocks Buildtool rocks!" wp-rich-formats="bold,italic,code,image,text-color,link,keyboard"><?php echo attr('description'); ?></p>
+  <p wp-rich="description" wp-rich-formats="bold,italic,code,image,text-color,link,keyboard"><?php echo attr('description'); ?></p>
 
   <?php if (attr('show_test')) : ?>
     <p>Test showing</p>
