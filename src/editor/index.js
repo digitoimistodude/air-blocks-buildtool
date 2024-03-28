@@ -3,19 +3,14 @@ const {
   useBlockProps,
   InspectorControls,
   InnerBlocks,
+  MediaUpload,
+  MediaUploadCheck,
 } = window.wp.blockEditor;
-const {
-  registerBlockType,
-  __experimentalSanitizeBlockAttributes,
-} = window.wp.blocks;
+const { registerBlockType, __experimentalSanitizeBlockAttributes } =
+  window.wp.blocks;
 const apiFetch = window.wp.apiFetch;
 const { addQueryArgs } = window.wp.url;
-const {
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-} = window.wp.element;
+const { useState, useEffect, useRef, useMemo, useReducer } = window.wp.element;
 const { useDebounce } = window.wp.compose;
 const {
   Spinner,
@@ -23,12 +18,16 @@ const {
   PanelBody,
   PanelRow,
   ToggleControl,
+  Button,
   SelectControl,
+  BaseControl,
+  __experimentalNumberControl: NumberControl,
 } = window.wp.components;
+const { withSelect } = window.wp.data;
 const { __ } = window.wp.i18n;
 
 import bringHtmlToLife from "./html-parser";
-import { getBlock } from './macro.js' with { type: 'macro' };
+import { getBlock } from "./macro.js" with { type: "macro" };
 
 function rendererPath(block, attributes = null, urlQueryArgs = {}) {
   return addQueryArgs(`/wp/v2/block-renderer/${block}`, {
@@ -91,14 +90,14 @@ registerBlockType(name, {
       const block = wp.blocks.getBlockType(name);
       if (!block) return;
       return Object.keys(block.attributes)
-        .map((i) => ({ name: i, ...(block.attributes[i]) }))
+        .map((i) => ({ name: i, ...block.attributes[i] }))
         .map((i) => ({
           name: i.name,
           value: props.attributes[i.name],
           ...i,
           ...props.attributes[i.name],
         }))
-        .filter((i) => i["air-type"] === "sidebar");
+        .filter((i) => i.air_location === "sidebar");
     }, [props]);
 
     useEffect(() => {
@@ -128,7 +127,7 @@ registerBlockType(name, {
     let serialized = bringHtmlToLife(
       response.trim(),
       props.attributes,
-      props.setAttributes
+      props.setAttributes,
     );
 
     // Sometimes newlines mess this up
@@ -136,7 +135,7 @@ registerBlockType(name, {
 
     const element = window.React.cloneElement(serialized, {
       ...blockProps,
-      className: `${blockProps.className} ${serialized?.props?.className ?? ''}`,
+      className: `${blockProps.className} ${serialized?.props?.className ?? ""}`,
       children: [
         ...serialized.props.children,
         sidebarAttributes.length > 0 ? (
@@ -148,48 +147,7 @@ registerBlockType(name, {
               {sidebarAttributes.map((attribute) => (
                 <PanelRow key={attribute.name}>
                   <fieldset style={{ width: "100%" }} id={attribute.name}>
-                    {attribute.type === "string" && !attribute.enum && (
-                      <TextControl
-                        label={__(
-                          attribute["air-label"] || attribute.name,
-                          "bodybuilder"
-                        )}
-                        value={props.attributes[attribute.name]}
-                        onChange={(val) =>
-                          props.setAttributes({ [attribute.name]: val })
-                        }
-                      />
-                    )}
-                    {attribute.type === "boolean" && (
-                      <ToggleControl
-                        label={__(
-                          attribute["air-label"] || attribute.name,
-                          "bodybuilder"
-                        )}
-                        checked={props.attributes[attribute.name]}
-                        onChange={(val) =>
-                          props.setAttributes({ [attribute.name]: val })
-                        }
-                      />
-                    )}
-                    {attribute.enum && (
-                      <SelectControl
-                        label={__(
-                          attribute["air-label"] || attribute.name,
-                          "bodybuilder"
-                        )}
-                        value={props.attributes[attribute.name]}
-                        options={Object.keys(attribute["air-options"]).map(
-                          (key) => ({
-                            value: key,
-                            label: attribute["air-options"][key],
-                          })
-                        )}
-                        onChange={(val) =>
-                          props.setAttributes({ [attribute.name]: val })
-                        }
-                      />
-                    )}
+                    <AttributeEditor attribute={attribute} props={props} />
                   </fieldset>
                 </PanelRow>
               ))}
@@ -204,3 +162,114 @@ registerBlockType(name, {
   },
   save: () => <InnerBlocks.Content />,
 });
+
+function getImage(id) {
+  try {
+    return wp?.data?.select('core')?.getMedia(id)
+  } catch (e) {
+    return;
+  }
+}
+
+function ImagePreview({ image }) {
+  if (!image) {
+    return <>Loading image...</>;
+  }
+
+  return (
+    <img src={image?.source_url} />
+  )
+}
+
+function AttributeEditor({ attribute, props }) {
+  if (attribute.enum) {
+    return (
+      <SelectControl
+        label={__(attribute["air_label"] || attribute.name, "bodybuilder")}
+        value={props.attributes[attribute.name]}
+        options={Object.keys(attribute["air-options"]).map((key) => ({
+          value: key,
+          label: attribute["air-options"][key],
+        }))}
+        onChange={(val) => props.setAttributes({ [attribute.name]: val })}
+      />
+    );
+  }
+
+  switch (attribute.air_type) {
+    case "number":
+    case "integer":
+      return (
+        <NumberControl
+          label={__(attribute["air_label"] || attribute.name, "bodybuilder")}
+          value={props.attributes[attribute.name]}
+          onChange={(val) =>
+            props.setAttributes({
+              [attribute.name]: parseInt(val) || undefined,
+            })
+          }
+        />
+      );
+    case "boolean":
+      return (
+        <ToggleControl
+          label={__(attribute["air_label"] || attribute.name, "bodybuilder")}
+          checked={props.attributes[attribute.name]}
+          onChange={(val) => props.setAttributes({ [attribute.name]: val })}
+        />
+      );
+    case "image":
+      const PreloadedImage = withSelect( ( select, ownProps ) => {
+        const { getMedia } = select( 'core' );
+        const { id } = ownProps;
+        return {
+          image: getMedia( id ),
+        };
+      } )( ImagePreview );
+
+      return (
+        <BaseControl
+          label={__(attribute["air_label"] || attribute.name, "bodybuilder")}
+        >
+          <MediaUploadCheck>
+            <br />
+            <MediaUpload
+              onSelect={(imageInfo) => {
+                props.setAttributes({ [attribute.name]: imageInfo.id });
+                setImageInfo(imageInfo);
+              }}
+              allowedTypes={["image"]}
+              value={props.attributes[attribute.name]}
+              render={({ open }) => {
+                return !props.attributes[attribute.name] ? (
+                  <Button variant="primary" onClick={open}>
+                    {__("Open media library", "bodybuilder")}
+                  </Button>
+                ) : window['_'] ? <PreloadedImage id={props.attributes[attribute.name]} /> : <>Loading...</>
+              }}
+            />
+          </MediaUploadCheck>
+          {props.attributes[attribute.name] && (
+            <MediaUploadCheck>
+              <br />
+              <Button
+                onClick={() =>
+                  props.setAttributes({ [attribute.name]: undefined })
+                }
+              >
+                {__("Remove image selection", "bodybuilder")}
+              </Button>
+            </MediaUploadCheck>
+          )}
+        </BaseControl>
+      );
+    default:
+      return (
+        <TextControl
+          label={__(attribute["air_label"] || attribute.name, "bodybuilder")}
+          value={props.attributes[attribute.name]}
+          onChange={(val) => props.setAttributes({ [attribute.name]: val })}
+        />
+      );
+  }
+}

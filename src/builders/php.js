@@ -42,6 +42,10 @@ export async function generateBlockJson(input) {
       (i) => i.what?.kind === "name" && i.what.name === "register_attribute"
     ); // Check that it's a attribute registration
 
+  const customAttributeTypes = {
+    image: "number",
+  };
+
   // TODO: process these attributes to proper block json format :)
   let attributes = attributeExpressions.map((expression) => {
     const [name, label, type, defaultValue] = expression.arguments.map(
@@ -49,10 +53,11 @@ export async function generateBlockJson(input) {
     );
     return {
       name,
-      type,
+      type: customAttributeTypes[type] ?? type,
       defaultValue,
-      "air-type": "sidebar",
-      "air-label": label,
+      air_location: "sidebar",
+      air_label: label,
+      air_type: type,
     };
   });
 
@@ -70,6 +75,10 @@ export async function generateBlockJson(input) {
     editorScript: "file:./editor.js",
     render: "file:./render.php",
     attributes,
+    supports: {
+      html: false,
+      customClassName: false,
+    },
   };
 
   // Allow overriding block.json using <blockname>.block.json
@@ -129,8 +138,9 @@ async function getRichTextAttributes(program) {
       name,
       type: "string",
       default: defaultValue ?? "",
-      "air-label": name,
-      "air-type": "rich-text",
+      air_label: name,
+      air_location: "rich-text",
+      air_type: "string",
     };
   });
 }

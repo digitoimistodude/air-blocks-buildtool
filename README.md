@@ -4,14 +4,13 @@ Build native WordPress blocks using PHP without having to leave your editor (WIP
 
 ## Requirements
 
-- php (CLI)
 - [Bun](https://bun.sh)
 
 ## Usage
 
 This tool is designed for [air-light](https://github.com/digitoimistodude/air-light), but can be used with any WordPress theme. You just need to configure the input and output directories respectively.
 
-By default, the tool looks for .php files in the `template-parts/blocks` directory and generates blocks to `blocks/` directory. Blocks are generated like this: `template-parts/blocks/test.php` -> `blocks/test/block.json`. You can register the block using `register_block_type( __DIR__ . "/blocks/<block name>/block.json" )` in functions.php.
+By default, the tool looks for \*.block.php files in the `template-parts/blocks` directory and generates blocks to `blocks/` directory. Blocks are generated like this: `template-parts/blocks/test.block.php` -> `blocks/test/block.json`. You can register the block using `register_block_type( __DIR__ . "/blocks/<block name>/block.json" )` in functions.php.
 
 Blocks are configured with a comment header (similar to themes or plugins), like this:
 
@@ -24,13 +23,14 @@ Blocks are configured with a comment header (similar to themes or plugins), like
  * Icon:              star
  */
 
-register_attribute('test', 'Test value', 'string', 'Default value');
-register_attribute('show_test', 'Show test', 'boolean', false);
-register_attribute('select_option', 'Select option', 'enum', 'option-2', [
+register_attribute( 'test', 'Test value', 'string', 'Default value' );
+register_attribute( 'show_test', 'Show test', 'boolean', false );
+register_attribute( 'epic_image', 'Image', 'image', 0 );
+register_attribute( 'select_option', 'Select option', 'enum', 'option-2', [
   'option-1' => 'Option 1',
   'option-2' => 'Option 2',
   'option-3' => 'Option 3',
-]);
+] );
 register_rich_text( 'title' );
 register_rich_text( 'description', 'Default description' );
 ?>
@@ -46,13 +46,17 @@ register_rich_text( 'description', 'Default description' );
     <p>Test showing</p>
   <?php endif; ?>
 
+  <?php native_lazyload_tag( attr( 'epic_image' ) ); ?>
+
   <!-- Use wp-allowed-blocks to specify allowed blocks, default all. -->
   <!-- Separated by a comma, no spaces. If a namespace (namespace/block) is not specified, by default using core -->
   <InnerBlocks wp-allowed-blocks="paragraph" />
 </section>
 ```
 
-To build the blocks, run `bun /path/to/repository build` in the theme directory.
+To install dependencies, run `bun install`.
+
+To build the blocks, run `bun /path/to/repository/src/index.js build` in the theme directory.
 
 ## Overriding generated block.json values
 

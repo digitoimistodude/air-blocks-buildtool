@@ -32,8 +32,12 @@ export default function bringHtmlToLife(
               format.includes("/") ? format : `core/${format}`
             ) ?? [];
 
+        const { ["class"]: discard, ...customAttribs } = node.attribs;
+
         return (
           <RichText
+            {...customAttribs}
+            className={node.attribs.class}
             tagName={node.name} // The tag here is the element output and editable in the admin
             value={attributes[attributeName] ?? ""} // Any existing content, either from the database or an attribute default
             allowedFormats={formats} // Allow the content to be made bold or italic, but do not allow other formatting options

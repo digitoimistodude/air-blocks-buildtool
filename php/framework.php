@@ -38,10 +38,10 @@ $is_editor = defined( 'REST_REQUEST' ) && true === REST_REQUEST && 'edit' === fi
 
 if ( ! $is_editor ) {
   // Replace innerblocks
-  $html = preg_replace( '(<InnerBlocks.*\/{0,1}>)', $content, $html );
+  $html = preg_replace( '(<InnerBlocks[^>]*\/{0,1}>)', $content, $html );
 
   // Remove attributes
-  $html = preg_replace( '( wp-[a-z\-]*=".*")', '', $html );
+  $html = preg_replace( '( wp-[a-z\-]+="[^"]+")', '', $html );
 }
 
 // We're just parsing content coming from blocks, so no escaping is necessary.
