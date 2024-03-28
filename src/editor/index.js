@@ -163,14 +163,6 @@ registerBlockType(name, {
   save: () => <InnerBlocks.Content />,
 });
 
-function getImage(id) {
-  try {
-    return wp?.data?.select('core')?.getMedia(id)
-  } catch (e) {
-    return;
-  }
-}
-
 function ImagePreview({ image }) {
   if (!image) {
     return <>Loading image...</>;

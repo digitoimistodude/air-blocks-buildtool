@@ -3,7 +3,7 @@ const { InnerBlocks, RichText } = window.wp.blockEditor;
 const { __ } = window.wp.i18n;
 
 const htmlToReactParser = new Parser();
-const richTextTags = ["p", "a", "h1", "h2", "h3", "h4", "h5", "h6"];
+const richTextTags = ["p", "span", "a", "h1", "h2", "h3", "h4", "h5", "h6"];
 
 /**
  * Turns HTML into React element, with all necessary rich stuff
@@ -61,8 +61,33 @@ export default function bringHtmlToLife(
             ?.split(",")
             .map((format) =>
               format.includes("/") ? format : `core/${format}`
-            ) ?? undefined;
-        return <InnerBlocks allowedBlocks={allowedBlocks} />;
+            ) ?? true;
+        return (
+          <InnerBlocks
+            allowedBlocks={allowedBlocks}
+            template={
+              node.attribs["wp-template"]
+                ? JSON.parse(node.attribs["wp-template"])
+                : undefined
+            }
+            templateLock={
+              node.attribs["wp-template-lock"]
+                ? node.attribs["wp-template-lock"] === "false"
+                  ? false
+                  : node.attribs["wp-template-lock"]
+                : undefined
+            }
+            templateInsertUpdatesSelection={
+              node.attribs["wp-template-insert-updates-selection"] === "true"
+            }
+            defaultBlock={
+              node.attribs["wp-default-block"]
+                ? JSON.parse(node.attribs["wp-default-block"])
+                : undefined
+            }
+            directInsert={node.attribs["wp-direct-insert"] === "true"}
+          />
+        );
       },
     },
     {

@@ -14,7 +14,7 @@ export async function generateBlockJson(input) {
   const program = parser.parseCode(await Bun.file(input).text());
 
   // Get the title, description, etc from comment header
-  const headerExpression = program.children[0].leadingComments[0];
+  const headerExpression = program?.children[0]?.leadingComments[0];
   if (!headerExpression)
     throw new Error(`Couldn't register block due to header missing.`);
 

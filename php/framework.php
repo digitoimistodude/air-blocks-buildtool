@@ -31,7 +31,7 @@ if ( ! function_exists( 'attr' ) ) {
 // End WP Block Builder "framework"
 
 ob_start();
-require_once 'block.php';
+require 'block.php';
 $html = ob_get_clean();
 
 $is_editor = defined( 'REST_REQUEST' ) && true === REST_REQUEST && 'edit' === filter_input( INPUT_GET, 'context', FILTER_SANITIZE_STRING );
