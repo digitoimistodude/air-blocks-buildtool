@@ -1,5 +1,5 @@
 > [!NOTE]
-> **WIP Notice:** This tool is currently in early testing version and we are planning to replace [air-blocks](https://github.com/digitoimistodude/air-blocks) with more native approach while retaining coding blocks via [ACF](https://www.advancedcustomfields.com/) and [PHP](https://www.php.net/).
+> **WIP Notice:** This tool is currently in early testing version and we are planning to improve the [air-blocks](https://github.com/digitoimistodude/air-blocks) workflow with more native approach while retaining coding blocks via [ACF](https://www.advancedcustomfields.com/) and [PHP](https://www.php.net/).
 
 # A native Air-blocks build tool
 [![GitHub release](https://img.shields.io/github/tag/digitoimistodude/air-blocks-buildtool.svg?style=flat-square)](https://github.com/digitoimistodude/air-blocks-buildtool/releases) ![GitHub contributors](https://img.shields.io/github/contributors/digitoimistodude/air-blocks-buildtool.svg?style=flat-square)
