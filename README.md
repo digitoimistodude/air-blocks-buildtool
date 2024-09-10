@@ -1,4 +1,7 @@
-# air-blocks-buildtool
+> [!NOTE]
+> **WIP Notice:** This tool is currently in early testing version and we are planning to replace [air-blocks](https://github.com/digitoimistodude/air-blocks) with more native approach while retaining coding blocks via [ACF](https://www.advancedcustomfields.com/) and [PHP](https://www.php.net/).
+
+# A native Air-blocks build tool
 
 Build native WordPress blocks using PHP without having to leave your editor (WIP).
 
