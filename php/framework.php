@@ -30,11 +30,12 @@ if ( ! function_exists( 'attr' ) ) {
 
 // End WP Block Builder "framework"
 
+$is_editor = defined( 'REST_REQUEST' ) && true === REST_REQUEST && 'edit' === filter_input( INPUT_GET, 'context', FILTER_SANITIZE_STRING );
+
 ob_start();
 require 'block.php';
 $html = ob_get_clean();
 
-$is_editor = defined( 'REST_REQUEST' ) && true === REST_REQUEST && 'edit' === filter_input( INPUT_GET, 'context', FILTER_SANITIZE_STRING );
 
 if ( ! $is_editor ) {
   // Replace innerblocks
