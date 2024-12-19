@@ -10,7 +10,34 @@ Build native WordPress blocks using PHP without having to leave your editor (WIP
 
 - [Bun](https://bun.sh)
 
-## Usage
+## Getting started (WIP-alpha)
+
+1. Get [air-blocks/buildtool branch](https://github.com/digitoimistodude/air-blocks/tree/buildtool) to your Projects directory (you can just clone teh repo and checkout branch)
+2. Clone this repo to $HOME/Projects/air-blocks-buildtool
+3. Run newblock, build your new block with `+` (plus) icon
+4. Install global bun with `npm install bun --global`
+5. Cd in to your theme directory
+6. Run:
+
+```bash
+bun $HOME/Projects/air-blocks-buildtool/src/index.js build
+```
+
+7. Add to the end of your functions.php:
+
+```php
+/**
+ * Register air-blocks-buildtool blocks
+ */
+add_action('init', function() {
+  register_block_type( __DIR__ . '/blocks/content-image/block.json' );
+});
+```
+
+8. Allow all blocks in your functions.php allowed_block section if you're using [air-light](https://github.com/digitoimistodude/air-light).
+9. Block should now show up in the editor
+
+## What this tool is for
 
 This tool is designed for [air-light](https://github.com/digitoimistodude/air-light), but can be used with any WordPress theme. You just need to configure the input and output directories respectively.
 
